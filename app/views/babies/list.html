@@ -1,0 +1,53 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1>
+      Bambini
+    </h1>
+
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">Bambini Iscritti</div>
+      <div class="panel-body">
+        <div class="pull-right">
+          <a class="btn btn-primary" href="#/babies/add">
+            <span class="glyphicon glyphicon-plus"></span> Nuovo
+          </a>
+        </div>
+        <div>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Mesi</th>
+            <th>Retta Conc.</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="baby in babyList | orderBy:'name':true">
+            <td>{{baby.name}} {{baby.surname}}</td>
+            <td>{{baby.age}}</td>
+            <td><span data-ng-show="baby.fee">&euro; {{baby.fee / 100 | number : 2 }}</span></td>
+            <td>
+              <div class="btn-group">
+                <a class="btn btn-default btn-xs" alt="Edit" href="#/babies/edit/{{baby.$id}}">
+                  <span class="glyphicon glyphicon-edit"></span>
+                </a>
+              </div>
+              <div class="btn-group">
+                <button class="btn btn-danger btn-xs" alt="Remove" data-ng-click="delete(baby)">
+                  <span class="glyphicon glyphicon-remove"></span>
+                </button>
+              </div>
+
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

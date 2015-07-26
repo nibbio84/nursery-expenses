@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="panel">
+      <h1>Nuova Operazione</h1>
+      <form novalidate>
+
+        <div class="form-group clearfix">
+          <label>Tipo</label>
+          <div class="radio">
+            <div class="col-md-2">
+              <label>
+                <input type="radio" data-ng-model="expense.type" name="operationType" id="typeExpense" value="expense" checked />
+                Spesa
+              </label>
+            </div>
+            <div class="col-md-10">
+              <label>
+                <input type="radio" data-ng-model="expense.type" name="operationType" id="typeEarn" value="earn" />
+                Incasso
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="value">Importo (&euro;)</label>
+          <input data-ng-model="expense.currency" type="number" step="0.01" class="form-control" id="value" placeholder="Importo (&euro;)" required />
+        </div>
+
+        <div class="form-group">
+          <label for="description">Descrizione</label>
+          <input data-ng-model="expense.description" type="text" class="form-control" id="description" placeholder="Descrizione" required />
+        </div>
+
+        <div class="btn-toolbar">
+          <div class="btn-group">
+            <a class="btn btn-default" href="#/expenses/list">
+              Annulla
+            </a>
+          </div>
+
+          <div class="btn-group">
+            <button data-ng-click="save()" class="btn btn-primary">
+              <span class="glyphicon glyphicon-floppy-disk"></span> Inserisci
+            </button>
+          </div>
+
+      </form>
+    </div>
+  </div>
+</div>

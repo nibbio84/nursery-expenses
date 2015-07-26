@@ -1,0 +1,22 @@
+<div class="row">
+  <div class="panel">
+    <h1>Modifica Operazione</h1>
+    <form>
+
+    <div class="form-group">
+      <label for="value">Importo (&euro;)</label>
+      <input data-ng-model="expense.currency" type="number" step="0.01" class="form-control" id="value" placeholder="Importo (&euro;)" required />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Descrizione</label>
+      <input data-ng-model="expense.description" type="text" class="form-control" id="description" placeholder="Descrizione" required />
+    </div>
+
+    <button data-ng-click="save()" class="btn btn-primary">
+      <span class="glyphicon glyphicon-floppy-disk"></span> Salva
+    </button>
+
+    </form>
+  </div>
+</div>
