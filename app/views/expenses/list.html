@@ -4,18 +4,22 @@
       Cassa
     </h1>
 
+
+
     <div class="panel panel-default">
       <!-- Default panel contents -->
       <div class="panel-heading">Operazioni</div>
       <div class="panel-body">
+
         <div class="pull-right">
           <a class="btn btn-primary" href="#/expenses/add">
-            <span class="glyphicon glyphicon-plus"></span> Operazione
+            <span class="glyphicon glyphicon-plus"></span>
           </a>
           <a class="btn btn-primary" href="#/expenses/subscriptions">
-            <span class="glyphicon glyphicon-heart"></span> Iscrizioni
+            <span class="glyphicon glyphicon-calendar"></span>
           </a>
         </div>
+
         <div>
           <h2 data-ng-show="total>=0"><mark>+ &euro; {{total/100 | number : 2}}</mark></h2>
           <h2 data-ng-show="total<0"><mark>- &euro; {{-total/100 | number : 2}}</mark></h2>
@@ -42,14 +46,12 @@
             </td>
             <td>
               <div class="btn-group">
-                <a class="btn btn-default btn-xs" alt="Edit" href="#/expenses/edit/{{expense.$id}}">
+                <a data-ng-show="expense.type=='expense' || expense.type=='earn'" class="btn btn-default btn-sm" alt="Edit" href="#/expenses/edit/{{expense.$id}}">
                   <span class="glyphicon glyphicon-edit"></span>
                 </a>
-              </div>
-              <div class="btn-group">
-                <button class="btn btn-danger btn-xs" alt="Remove" data-ng-click="delete(expense)">
-                  <span class="glyphicon glyphicon-remove"></span>
-                </button>
+                <a data-ng-show="expense.type=='fee'" class="btn btn-default btn-sm" alt="Edit" href="#/expenses/subscriptions?month={{expense.month}}&year={{expense.year}}">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </a>
               </div>
 
             </td>

@@ -14,7 +14,15 @@ angular.module('nurseryExpensesApp')
     $scope.baby = databaseService.getBaby(id);
     $scope.$watch("baby", function() {
       if(!$scope.dateOfBirth && $scope.baby && $scope.baby.dateOfBirth) {
-        $scope.dateOfBirth = new Date($scope.baby.dateOfBirth);
+        if($scope.baby.dateOfBirth) {
+          $scope.dateOfBirth = new Date($scope.baby.dateOfBirth);
+        }
+        if($scope.baby.dateStart) {
+          $scope.dateStart = new Date($scope.baby.dateStart);
+        }
+        if($scope.baby.dateEnd) {
+          $scope.dateEnd = new Date($scope.baby.dateEnd);
+        }
       }
     }, true);
 
@@ -25,6 +33,13 @@ angular.module('nurseryExpensesApp')
       baby.fee = Math.abs(Math.round(baby.feeCurrency*100));
 
       databaseService.putBaby(baby)
+        .then(function() {
+          $location.path("/babies/list");
+        });
+    };
+
+    $scope.delete = function() {
+      databaseService.deleteBaby($scope.baby)
         .then(function() {
           $location.path("/babies/list");
         });

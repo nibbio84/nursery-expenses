@@ -13,6 +13,7 @@ angular.module('nurseryExpensesApp')
 
     $scope.expense = databaseService.getExpense(id);
 
+
     $scope.save = function() {
       var expense = $scope.expense;
 
@@ -21,6 +22,13 @@ angular.module('nurseryExpensesApp')
       expense.value = sign * Math.abs(Math.round(expense.currency*100));
 
       databaseService.putExpense($scope.expense)
+        .then(function() {
+          $location.path("/expenses/list");
+        });
+    };
+
+    $scope.delete = function() {
+      databaseService.deleteExpense($scope.expense)
         .then(function() {
           $location.path("/expenses/list");
         });

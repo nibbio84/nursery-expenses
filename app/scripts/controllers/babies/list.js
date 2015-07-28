@@ -25,9 +25,5 @@ angular.module('nurseryExpensesApp')
 
     }, true);
 
-    $scope.delete = function(baby) {
-      databaseService.deleteBaby(baby);
-    };
-
 
   });
