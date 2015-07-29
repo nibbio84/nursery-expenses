@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-md-12">
     <div class="panel">
-      <h1>Modifica Dati Bambino</h1>
-      <form novalidate>
+      <h1>Modifica Dati Bimbo</h1>
+      <form name="babyForm" novalidate>
 
         <div class="form-group">
           <label for="name">Nome</label>
@@ -11,22 +11,22 @@
 
         <div class="form-group">
           <label for="surname">Cognome</label>
-          <input data-ng-model="baby.surname" type="text" class="form-control" id="surname" placeholder="Cognome" />
+          <input data-ng-model="baby.surname" type="text" class="form-control" id="surname" placeholder="Cognome" required />
         </div>
 
         <div class="form-group">
           <label for="dateOfBirth">Data di Nascita</label>
-          <input data-ng-model="dateOfBirth" type="date" class="form-control" id="dateOfBirth" data-ng-change="baby.dateOfBirth=dateOfBirth.getTime()" />
+          <input data-ng-model="dateOfBirth" type="date" class="form-control" id="dateOfBirth" data-ng-change="baby.dateOfBirth=dateOfBirth.getTime()" required />
         </div>
 
         <div class="form-group">
           <label for="value">Retta Concordata (&euro;)</label>
-          <input data-ng-model="baby.feeCurrency" type="number" step="0.01" class="form-control" id="value" placeholder="Importo (&euro;)" required />
+          <input data-ng-model="baby.feeCurrency" type="number" step="0.01" min="0.01" data-ng-pattern="/^([0-9]){1,8}([,\.][0-9]{1,2}){0,1}$/" class="form-control" id="value" placeholder="Importo (&euro;)" required />
         </div>
 
         <div class="form-group">
           <label for="dateOfBirth">Data inizio</label>
-          <input data-ng-model="dateStart" type="date" class="form-control" id="dateStart" data-ng-change="baby.dateStart=dateStart.getTime()" />
+          <input data-ng-model="dateStart" type="date" class="form-control" id="dateStart" data-ng-change="baby.dateStart=dateStart.getTime()" required />
         </div>
 
         <div class="form-group">
@@ -48,7 +48,7 @@
           </div>
 
           <div class="btn-group">
-            <button data-ng-click="save()" class="btn btn-primary">
+            <button data-ng-click="save()" data-ng-disabled="babyForm.$invalid" class="btn btn-primary">
               <span class="glyphicon glyphicon-floppy-disk"></span> Salva
             </button>
           </div>

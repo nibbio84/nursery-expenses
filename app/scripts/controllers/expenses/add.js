@@ -11,8 +11,11 @@ angular.module('nurseryExpensesApp')
   .controller('ExpensesAddCtrl', function ($scope, $location, databaseService) {
 
     $scope.expense = {
-      type: "expense"
+      type: "expense",
+      category: databaseService.defaultExpenseCategory
     };
+
+    $scope.expenseCategories = databaseService.expenseCategories;
 
     $scope.save = function() {
       var expense = angular.copy($scope.expense);

@@ -32,6 +32,10 @@ angular.module('nurseryExpensesApp')
       // convert to eurocent
       baby.fee = Math.abs(Math.round(baby.feeCurrency*100));
 
+      if(!baby.dateEnd) {
+        delete baby.dateEnd; // Fix for firebase
+      }
+
       databaseService.putBaby(baby)
         .then(function() {
           $location.path("/babies/list");

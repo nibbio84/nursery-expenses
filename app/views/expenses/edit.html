@@ -1,7 +1,7 @@
 <div class="row">
   <div class="panel">
     <h1>Modifica Operazione</h1>
-    <form>
+    <form name="operationForm">
 
       <div class="form-group clearfix">
         <label>Tipo</label>
@@ -23,12 +23,24 @@
 
       <div class="form-group">
         <label for="value">Importo (&euro;)</label>
-        <input data-ng-model="expense.currency" type="number" step="0.01" class="form-control" id="value" placeholder="Importo (&euro;)" required />
+        <input data-ng-model="expense.currency" type="number" step="0.01" min="0.01" data-ng-pattern="/^([0-9]){1,8}([,\.][0-9]{1,2}){0,1}$/" class="form-control" id="value" placeholder="Importo (&euro;)" required />
       </div>
 
       <div class="form-group">
-        <label for="description">Descrizione</label>
-        <input data-ng-model="expense.description" type="text" class="form-control" id="description" placeholder="Descrizione" required />
+        <label for="category">Categoria</label>
+        <div class="btn-group">
+          <button id="category" type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+            {{expenseCategories[expense.category]}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu">
+            <li data-ng-repeat="(cat, desc) in expenseCategories"><a href="" data-ng-click="expense.category=cat"> {{desc}}</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="description">Descrizione (opzionale)</label>
+        <input data-ng-model="expense.description" type="text" class="form-control" id="description" placeholder="Descrizione" />
       </div>
 
       <div class="btn-toolbar">
@@ -44,7 +56,7 @@
           </button>
         </div>
         <div class="btn-group">
-          <button type="submit" data-ng-click="save()" class="btn btn-primary">
+          <button type="submit" data-ng-click="save()" data-ng-disabled="operationForm.$invalid" class="btn btn-primary">
             <span class="glyphicon glyphicon-floppy-disk"></span> Salva
           </button>
         </div>

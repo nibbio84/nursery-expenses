@@ -65,6 +65,11 @@ angular
         controller: 'ExpensesSubscriptionsCtrl',
         controllerAs: 'expenses/subscriptions'
       })
+      .when('/expenses/unaTantum', {
+        templateUrl: 'views/expenses/unatantum.html',
+        controller: 'ExpensesUnatantumCtrl',
+        controllerAs: 'expenses/unaTantum'
+      })
       .otherwise({
         redirectTo: '/'
       });

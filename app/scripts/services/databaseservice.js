@@ -44,6 +44,17 @@ angular.module('nurseryExpensesApp')
       return self.expensesArray;
     };
 
+    this.expenseCategories = {
+        "food": "Alimentare",
+        "tools": "Sussidi didattici",
+        "franchising": "Franchising",
+        "renovation": "Rinnovo locali",
+        "other": "Altro"
+    };
+
+    this.defaultExpenseCategory = "food";
+
+
     /**
      * Babies section
      */

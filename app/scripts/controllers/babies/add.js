@@ -14,6 +14,10 @@ angular.module('nurseryExpensesApp')
       var baby = angular.copy($scope.baby);
       baby.timestamp = new Date().getTime();
 
+      if(!baby.dateEnd) {
+        delete baby.dateEnd; // Fix for firebase
+      }
+
       // convert to eurocent
       baby.fee = Math.abs(Math.round(baby.feeCurrency*100));
 

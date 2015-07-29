@@ -2,20 +2,21 @@
 
 /**
  * @ngdoc function
- * @name nurseryExpensesApp.controller:ExpensesSubscriptionsCtrl
+ * @name nurseryExpensesApp.controller:ExpensesUnatantumCtrl
  * @description
- * # ExpensesSubscriptionsCtrl
+ * # ExpensesUnatantumCtrl
  * Controller of the nurseryExpensesApp
  */
 angular.module('nurseryExpensesApp')
-  .controller('ExpensesSubscriptionsCtrl', function ($scope, $routeParams, databaseService, utilService) {
-
+  .controller('ExpensesUnatantumCtrl', function ($scope, $routeParams, databaseService, utilService) {
     $scope.babyFullList = databaseService.babies();
     $scope.allExpenses = databaseService.expenses();
 
     var date = new Date();
     $scope.year = $routeParams.year ? parseInt($routeParams.year, 10) : date.getFullYear();
     $scope.month = $routeParams.month ? parseInt($routeParams.month, 10) : date.getMonth();
+
+    $scope.currency = 320;
 
     $scope.$watch("year", updateScope, true);
     $scope.$watch("month", updateScope, true);
@@ -36,12 +37,14 @@ angular.module('nurseryExpensesApp')
         return; // No more than one per month
       }
 
+      var value = Math.abs(parseInt($scope.currency*100, 10));
+
       var operation = {
         type: "earn",
-        category: "fee",
-        currency: baby.fee/100,
-        value: baby.fee,
-        description: "Retta " + $scope.monthNames[$scope.month] + " " + $scope.year + " " + baby.name + " " + baby.surname,
+        category: "unatantum",
+        currency: $scope.currency,
+        value: value,
+        description: "Iscrizione da " + $scope.monthNames[$scope.month] + " " + $scope.year + " " + baby.name + " " + baby.surname,
         timestamp: new Date().getTime(),
         year: $scope.year,
         month: $scope.month,
@@ -56,24 +59,64 @@ angular.module('nurseryExpensesApp')
     };
 
 
-    // ---------
 
-
+    // -------------
 
     function updateScope() {
-      $scope.paid = extractPaid($scope.allExpenses, $scope.month, $scope.year);
+      var payments = extractPaid($scope.allExpenses, $scope.month, $scope.year, utilService);
+      $scope.paid = payments["done"];
+      $scope.lastPaid = payments["last"];
       $scope.babyList = filterBabies($scope.babyFullList, $scope.month, $scope.year);
+
+      if(!$scope.currencySet) {
+        var last = lastValue($scope.allExpenses);
+        if(last) {
+          $scope.currencySet = true;
+          $scope.currency = last / 100;
+        }
+      }
     }
 
-    function extractPaid(expenses, month, year) {
-      var paid = {};
+    function extractPaid(expenses, month, year, utilService) {
+      var paid = {
+        done: {},
+        last: {}
+      };
+
+      var fakeNow = new Date(year, month, 1);
+
       for(var i=0; i<expenses.length; i++) {
         var expense = expenses[i];
-        if(expense.category && expense.category=="fee" && expense.year==year && expense.month==month) {
-          paid[expense.babyId] = expense;
+        if(expense.category && expense.category=="unatantum") {
+          if(expense.year==year && expense.month==month) {
+            paid["done"][expense.babyId] = expense;
+          }
+
+          var unaDate = new Date(expense.year, expense.month, 1);
+          if(unaDate.getTime() <= fakeNow.getTime()) {
+            var monthsBetween = utilService.monthsBetween(unaDate, fakeNow);
+            var lastPaid = paid["last"][expense.babyId];
+            paid["last"][expense.babyId] = lastPaid || lastPaid===0 ? Math.min(lastPaid, monthsBetween) : monthsBetween;
+          }
         }
       }
       return paid;
+    }
+
+    function lastValue(expenses) {
+      var maxDate = -1;
+      var value;
+      for(var i=0; i<expenses.length; i++) {
+        var expense = expenses[i];
+        if(expense.category && expense.category=="unatantum") {
+          var unaDate = new Date(expense.year, expense.month, 1);
+          if(unaDate.getTime()>maxDate) {
+            maxDate = unaDate.getTime();
+            value = expense.value;
+          }
+        }
+      }
+      return value;
     }
 
     function filterBabies(allBabies, month, year) {
@@ -113,5 +156,6 @@ angular.module('nurseryExpensesApp')
       }
       return {"month": month, "year": year};
     }
+
 
   });

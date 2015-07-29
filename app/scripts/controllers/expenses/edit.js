@@ -13,6 +13,7 @@ angular.module('nurseryExpensesApp')
 
     $scope.expense = databaseService.getExpense(id);
 
+    $scope.expenseCategories = databaseService.expenseCategories;
 
     $scope.save = function() {
       var expense = $scope.expense;
