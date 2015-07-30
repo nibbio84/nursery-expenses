@@ -11,7 +11,7 @@
 
 var resolver = function(access) {
  return {
-   load: function($q, $location, databaseService) {
+   load: ["$q", "$location", "databaseService", function($q, $location, databaseService) {
      var deferred = $q.defer();
      if (access) {
        deferred.resolve();
@@ -24,7 +24,7 @@ var resolver = function(access) {
        });
      }
      return deferred.promise;
-   }
+   }]
  };
 };
 
