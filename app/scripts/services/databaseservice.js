@@ -1,4 +1,5 @@
 'use strict';
+/*global Firebase */
 
 /**
  * @ngdoc service
@@ -8,7 +9,7 @@
  * Service in the nurseryExpensesApp.
  */
 angular.module('nurseryExpensesApp')
-  .service('databaseService', function ($firebaseArray, $firebaseObject) {
+  .service('databaseService', function ($rootScope, $firebaseArray, $firebaseObject, $q) {
     // AngularJS will instantiate a singleton by calling "new" on this function
     this.baseRef = new Firebase("https://asilo.firebaseio.com");
     this.expensesRef = this.baseRef.child("expenses");
@@ -16,6 +17,64 @@ angular.module('nurseryExpensesApp')
     this.imagesRef = this.baseRef.child("images");
 
     var self = this;
+
+    /**
+     * General services
+     */
+     this.sync = function() {
+       var deferred = $q.defer();
+
+       if(!$rootScope.loggedUser) {
+         self.expensesArray = $firebaseArray(self.expensesRef);
+         self.babiesArray = $firebaseArray(self.babiesRef);
+         self.imagesArray = $firebaseArray(self.imagesRef);
+       }
+
+       self.expensesArray.$loaded().then(function() {
+         return self.babiesArray.$loaded();
+       }).then(function() {
+         return self.imagesArray.$loaded();
+       }).then(function() {
+         // Success
+         var auth = self.baseRef.getAuth();
+         if(auth && auth.password && auth.password.email) {
+           $rootScope.loggedUser = auth.password.email;
+         } else {
+           $rootScope.loggedUser = "anonymous";
+         }
+
+         deferred.resolve();
+       }, function() {
+         // error
+         $rootScope.loggedUser = null;
+         self.expensesArray=null;
+         self.babiesArray=null;
+         self.imagesArray=null;
+         deferred.reject();
+       });
+
+       return deferred.promise;
+     };
+
+     this.logout = function() {
+       $rootScope.loggedUser = null;
+       self.baseRef.unauth();
+     };
+
+     this.login = function(username, password) {
+       var deferred = $q.defer();
+       self.baseRef.authWithPassword({
+         email    : username,
+         password : password
+       }, function(error) {
+         if (error) {
+           deferred.reject();
+         } else {
+           deferred.resolve();
+         }
+       });
+       return deferred.promise;
+     };
 
     /**
      * Expenses section
@@ -29,6 +88,18 @@ angular.module('nurseryExpensesApp')
       return self.expenses().$getRecord(id);
     };
 
+    this.getExpensesByBaby = function(babyId) {
+      var exps = self.expenses();
+      var babyExps = [];
+      for(var i=0; i<exps.length; i++) {
+        var exp = exps[i];
+        if(exp.babyId===babyId) {
+          babyExps.push(exp);
+        }
+      }
+      return babyExps;
+    };
+
     this.putExpense = function(expense) {
       return self.expenses().$save(expense);
     };
@@ -38,9 +109,6 @@ angular.module('nurseryExpensesApp')
     };
 
     this.expenses = function() {
-      if(!self.expensesArray) {
-        self.expensesArray = $firebaseArray(self.expensesRef);
-      }
       return self.expensesArray;
     };
 
@@ -76,9 +144,6 @@ angular.module('nurseryExpensesApp')
     };
 
     this.babies = function() {
-      if(!self.babiesArray) {
-        self.babiesArray = $firebaseArray(self.babiesRef);
-      }
       return self.babiesArray;
     };
 
@@ -94,9 +159,6 @@ angular.module('nurseryExpensesApp')
     };
 
     this.images = function() {
-      if(!self.imagesArray) {
-        self.imagesArray = $firebaseArray(self.imagesRef);
-      }
       return self.imagesArray;
     };
 

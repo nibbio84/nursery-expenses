@@ -8,31 +8,34 @@
  * Controller of the nurseryExpensesApp
  */
 angular.module('nurseryExpensesApp')
-  .controller('ExpensesEditCtrl', function ($scope, $routeParams, $location, databaseService) {
-    var id = $routeParams.id;
+  .controller('ExpensesEditCtrl', function ($rootScope, $scope, $routeParams, $location, databaseService) {
 
-    $scope.expense = databaseService.getExpense(id);
+      var id = $routeParams.id;
 
-    $scope.expenseCategories = databaseService.expenseCategories;
+      $scope.expense = databaseService.getExpense(id);
 
-    $scope.save = function() {
-      var expense = $scope.expense;
+      $scope.expenseCategories = databaseService.expenseCategories;
 
-      var sign = expense.type=='earn' ? +1 : -1;
-      // fix sign and convert to eurocent
-      expense.value = sign * Math.abs(Math.round(expense.currency*100));
+      $scope.save = function() {
+        var expense = $scope.expense;
 
-      databaseService.putExpense($scope.expense)
-        .then(function() {
-          $location.path("/expenses/list");
-        });
-    };
+        var sign = expense.type=='earn' ? +1 : -1;
+        // fix sign and convert to eurocent
+        expense.value = sign * Math.abs(Math.round(expense.currency*100));
 
-    $scope.delete = function() {
-      databaseService.deleteExpense($scope.expense)
-        .then(function() {
-          $location.path("/expenses/list");
-        });
-    };
+        expense.user = $rootScope.loggedUser;
+
+        databaseService.putExpense($scope.expense)
+          .then(function() {
+            $location.path("/expenses/list");
+          });
+      };
+
+      $scope.delete = function() {
+        databaseService.deleteExpense($scope.expense)
+          .then(function() {
+            $location.path("/expenses/list");
+          });
+      };
 
   });

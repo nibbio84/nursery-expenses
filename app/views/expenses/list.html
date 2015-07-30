@@ -44,7 +44,7 @@
           <tbody>
             <tr ng-repeat="expense in expensesPerMonth[month] | orderBy:'timestamp':true">
               <td>{{expense.timestamp|date:'dd/MM/yyyy HH:mm'}}</td>
-              <td>{{expense.description}} <span class="label label-info">{{expense.category}}</span></td>
+              <td>{{expense.description}} <span class="label label-info">{{expense.category}}</span> <span class="label label-primary">{{expense.user.substring(0, 3)}}</span></td>
               <td>
                 <span data-ng-show="expense.value>=0">+ &euro; {{expense.value/100 | number : 2}}</span>
                 <span data-ng-show="expense.value<0">- &euro; {{-expense.value/100 | number : 2}}</span>

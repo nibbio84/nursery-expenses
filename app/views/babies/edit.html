@@ -25,12 +25,12 @@
         </div>
 
         <div class="form-group">
-          <label for="dateOfBirth">Data inizio</label>
+          <label for="dateStart">Data inizio</label>
           <input data-ng-model="dateStart" type="date" class="form-control" id="dateStart" data-ng-change="baby.dateStart=dateStart.getTime()" required />
         </div>
 
         <div class="form-group">
-          <label for="dateOfBirth">Data fine (opzionale)</label>
+          <label for="dateEnd">Data fine (opzionale)</label>
           <input data-ng-model="dateEnd" type="date" class="form-control" id="dateEnd" data-ng-change="baby.dateEnd=dateEnd.getTime()" />
         </div>
 
@@ -42,7 +42,7 @@
           </div>
 
           <div class="btn-group">
-            <button class="btn btn-danger" alt="Remove" data-ng-click="delete()">
+            <button class="btn btn-danger" data-ng-disabled="babyHasExpenses" alt="Remove" data-ng-click="delete()">
               <span class="glyphicon glyphicon-remove"></span> Elimina
             </button>
           </div>
@@ -52,8 +52,11 @@
               <span class="glyphicon glyphicon-floppy-disk"></span> Salva
             </button>
           </div>
-
       </form>
     </div>
+    <div class="top-buffer" data-ng-show="babyHasExpenses">
+      <span>* Ci sono movimenti di cassa associati al bimbo. Non si pu&ograve; eliminare.</span>
+    </div>
   </div>
+</div>
 </div>

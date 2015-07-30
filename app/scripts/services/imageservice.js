@@ -25,7 +25,7 @@ angular.module('nurseryExpensesApp')
           } else {
             deferred.reject();
           }
-        }
+        };
         r.readAsBinaryString(file);
         return deferred.promise;
       } else {

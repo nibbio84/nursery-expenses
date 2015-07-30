@@ -9,5 +9,5 @@
  */
 angular.module('nurseryExpensesApp')
   .controller('MainCtrl', function () {
-    
+
   });
